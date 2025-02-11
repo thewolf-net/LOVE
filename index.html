@@ -78,22 +78,25 @@
             line-height: 1.4;
         }
 
+        .caricatura-container {
+            position: relative;
+            width: 100%;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
         .caricatura {
-            position: absolute;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
             width: 150px;
             height: 150px;
             background-image: url('https://raw.githubusercontent.com/thewolf-net/LOVE/main/Leonardo_Phoenix_10_A_minimalist_black_and_white_cartoon_portr_2.jpg');
             background-size: cover;
             background-position: center;
-            z-index: 0;
+            display: inline-block;
         }
 
         .message {
             position: absolute;
-            top: 180px;
+            top: 160px;
             left: 50%;
             transform: translateX(-50%);
             font-size: 1.2em;
@@ -101,20 +104,23 @@
             text-align: center;
             width: 80%;
             z-index: 2;
+            white-space: pre-line;
         }
     </style>
 </head>
 <body>
     <div class="hearts"></div>
-    <div class="caricatura"></div>
     <div class="container">
         <h1>¿Querés ser mi San Valentín? ❤️</h1>
+        <div class="caricatura-container">
+            <div class="caricatura"></div>
+            <div class="message"></div>
+        </div>
         <div class="buttons">
             <button id="siBtn">Sí</button>
             <button id="noBtn">No</button>
         </div>
     </div>
-    <div class="message"></div>
 
     <script>
         let scale = 1;
@@ -149,18 +155,30 @@
             noBtn.style.top = newY + 'px';
 
             // Cambiar el texto del mensaje según los intentos
-            if (clickCount >= 3) {
-                const textos = [
-                    "¿Segura?",
-                    "¿De verdad?",
-                    "Piénsalo bien",
-                    "¿Última oportunidad?",
-                    "¡No seas así!",
-                    ":((",
-                    "...</3"
-                ];
-                message.textContent = textos[Math.min(clickCount - 3, textos.length - 1)];
-            }
+            const textos = [
+                "¿Segura?",
+                "¿De verdad?",
+                "Piénsalo bien",
+                "¿Última oportunidad?",
+                "¡No seas así!",
+                ":((",
+                "...",
+                "¿En serio?",
+                "¿Estás segura?",
+                "¿No quieres?",
+                "¿Te lo pensarás?",
+                "¿No me quieres?",
+                "¿No te gusto?",
+                "¿No me amas?",
+                "¿No me extrañarás?",
+                "¿No me necesitas?",
+                "¿No me deseas?",
+                "¿No me valoras?",
+                "¿No me aprecias?",
+                "¿No me respetas?",
+                "¿No me admiras?"
+            ];
+            message.textContent = textos[Math.min(clickCount - 1, textos.length - 1)];
         });
 
         function createHearts() {
