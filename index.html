@@ -136,10 +136,8 @@
         const caricatura = document.getElementById('caricatura');
         let clickCount = 0;
 
-        // Las URLs de las tres imágenes
-        const imageUrl1 = "https://raw.githubusercontent.com/thewolf-net/LOVE/main/Leonardo_Phoenix_10_A_minimalist_black_and_white_cartoon_portr_2.jpg"; // Imagen principal
-        const imageUrl2 = "https://example.com/imagen2.jpg"; // Imagen al hacer clic en "No"
-        const imageUrl3 = "https://example.com/imagen3.jpg"; // Imagen al hacer clic en "Sí"
+        // La URL de la misma imagen para los tres casos
+        const imageUrl = "https://raw.githubusercontent.com/thewolf-net/LOVE/main/Leonardo_Phoenix_10_A_minimalist_black_and_white_cartoon_portr_2.jpg";
 
         // Lista de frases
         const textos = [
@@ -167,8 +165,8 @@
                     Te amo mucho mi niña❤️
                 </div>
                 <div class="caricatura-container">
-                    <!-- Imagen al hacer clic en "Sí" -->
-                    <div class="caricatura" style="background-image: url('${imageUrl3}');"></div>
+                    <!-- Tercera imagen debajo del mensaje -->
+                    <div class="caricatura" style="background-image: url('${imageUrl}');"></div>
                 </div>`;
             createHearts();
         });
@@ -179,7 +177,7 @@
             scale += 0.3;
             siBtn.style.transform = `scale(${scale})`;
 
-            caricatura.style.backgroundImage = `url('${imageUrl2}')`; // Cambia la imagen al hacer clic en "No"
+            caricatura.style.backgroundImage = `url('${imageUrl}')`; // Cambia la imagen al hacer clic en "No"
 
             const maxX = Math.min(window.innerWidth, 400) - noBtn.offsetWidth;
             const maxY = Math.min(window.innerHeight, 700) - noBtn.offsetHeight;
@@ -203,6 +201,10 @@
             const selectedText = availableTexts[randomIndex];
             usedTexts.add(selectedText);
             mainQuestion.innerHTML = selectedText + " 🥹";
+
+            // Segunda imagen debajo de las frases adicionales
+            document.querySelector('.caricatura-container').innerHTML = `
+                <div class="caricatura" style="background-image: url('${imageUrl}');"></div>`;
         });
 
         function isOverlapping(x, y, element, otherElement) {
