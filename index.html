@@ -130,6 +130,12 @@
         const caricatura = document.getElementById('caricatura');
         let clickCount = 0;
 
+        const images = [
+            "https://raw.githubusercontent.com/thewolf-net/LOVE/main/corazon_roto.jpg",
+            "https://raw.githubusercontent.com/thewolf-net/LOVE/main/imagen2.jpg",
+            "https://raw.githubusercontent.com/thewolf-net/LOVE/main/imagen3.jpg"
+        ];
+
         siBtn.addEventListener('click', () => {
             document.body.innerHTML = `
                 <div class="success-message">
@@ -147,10 +153,9 @@
             scale += 0.3;
             siBtn.style.transform = `scale(${scale})`;
 
-            // Cambiar el corazón a un corazón roto desde la primera vez que se hace clic en "No"
-            if (clickCount === 1) {
-                caricatura.style.backgroundImage = "url('https://raw.githubusercontent.com/thewolf-net/LOVE/main/corazon_roto.jpg')";
-            }
+            // Cambiar la imagen a una nueva cada vez que se hace clic en "No"
+            const randomImageIndex = Math.floor(Math.random() * images.length);
+            caricatura.style.backgroundImage = `url('${images[randomImageIndex]}')`;
 
             // Mover el botón "No" a una posición aleatoria dentro de los límites de la ventana
             const maxX = window.innerWidth - noBtn.offsetWidth - 40; // Mantener el área de movimiento en X
