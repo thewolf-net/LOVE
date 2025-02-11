@@ -165,24 +165,24 @@
             clickCount++;
             scale += 0.3;
             siBtn.style.transform = `scale(${scale})`;
-
-            // Cambiar la imagen a la misma imagen
+        
+            // Mantener la imagen igual
             caricatura.style.backgroundImage = `url('${imageUrl}')`;
-
-            // Mover el botón "No" a una posición aleatoria dentro de los límites de la ventana
-            const maxX = window.innerWidth - noBtn.offsetWidth ; // Se mantiene dentro de la pantalla
-            const maxY = window.innerHeight - noBtn.offsetHeight; // Se mantiene dentro de la pantalla
-
+        
+            // Definir los límites dentro de una pantalla móvil (máximo 90% del ancho/alto)
+            const maxX = Math.min(window.innerWidth, 400) - noBtn.offsetWidth; 
+            const maxY = Math.min(window.innerHeight, 700) - noBtn.offsetHeight; 
+        
             let newX, newY;
             do {
                 newX = Math.random() * maxX;
                 newY = Math.random() * maxY;
             } while (isOverlapping(newX, newY, noBtn, mainQuestion));
-
+        
             noBtn.style.position = 'absolute';
-            noBtn.style.left = newX + 'px';
-            noBtn.style.top = newY + 'px';
-
+            noBtn.style.left = `${newX}px`;
+            noBtn.style.top = `${newY}px`;
+        
             // Cambiar el texto del mensaje aleatoriamente sin repetición
             let availableTexts = textos.filter(text => !usedTexts.has(text));
             if (availableTexts.length === 0) {
