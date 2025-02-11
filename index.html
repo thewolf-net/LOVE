@@ -105,7 +105,6 @@
             white-space: pre-line;
         }
 
-        /* Aplica los cambios a TODAS las imágenes */
         img, .caricatura, .caricatura-container div {
             width: 200px;
             height: auto;
@@ -118,6 +117,7 @@
     <div class="container">
         <h1 id="main-question">¿Querés ser mi San Valentín? ❤️</h1>
         <div class="caricatura-container">
+            <!-- Imagen principal -->
             <div class="caricatura" id="caricatura" style="background-image: url('https://raw.githubusercontent.com/thewolf-net/LOVE/main/Leonardo_Phoenix_10_A_minimalist_black_and_white_cartoon_portr_2.jpg');"></div>
             <div class="message"></div>
         </div>
@@ -136,8 +136,12 @@
         const caricatura = document.getElementById('caricatura');
         let clickCount = 0;
 
-        const imageUrl = "https://raw.githubusercontent.com/thewolf-net/LOVE/main/Leonardo_Phoenix_10_A_minimalist_black_and_white_cartoon_portr_2.jpg";
+        // Las URLs de las tres imágenes
+        const imageUrl1 = "https://raw.githubusercontent.com/thewolf-net/LOVE/main/Leonardo_Phoenix_10_A_minimalist_black_and_white_cartoon_portr_2.jpg"; // Imagen principal
+        const imageUrl2 = "https://example.com/imagen2.jpg"; // Imagen al hacer clic en "No"
+        const imageUrl3 = "https://example.com/imagen3.jpg"; // Imagen al hacer clic en "Sí"
 
+        // Lista de frases
         const textos = [
             "Piénsalo bien",
             "¡No seas así! ¿De verdad no quieres?",
@@ -155,6 +159,7 @@
 
         let usedTexts = new Set();
 
+        // Acción al hacer clic en "Sí"
         siBtn.addEventListener('click', () => {
             document.body.innerHTML = `
                 <div class="success-message">
@@ -162,17 +167,19 @@
                     Te amo mucho mi niña❤️
                 </div>
                 <div class="caricatura-container">
-                    <div class="caricatura" style="background-image: url('${imageUrl}');"></div>
+                    <!-- Imagen al hacer clic en "Sí" -->
+                    <div class="caricatura" style="background-image: url('${imageUrl3}');"></div>
                 </div>`;
             createHearts();
         });
 
+        // Acción al hacer clic en "No"
         noBtn.addEventListener('click', () => {
             clickCount++;
             scale += 0.3;
             siBtn.style.transform = `scale(${scale})`;
 
-            caricatura.style.backgroundImage = `url('${imageUrl}')`;
+            caricatura.style.backgroundImage = `url('${imageUrl2}')`; // Cambia la imagen al hacer clic en "No"
 
             const maxX = Math.min(window.innerWidth, 400) - noBtn.offsetWidth;
             const maxY = Math.min(window.innerHeight, 700) - noBtn.offsetHeight;
