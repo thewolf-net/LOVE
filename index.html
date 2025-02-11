@@ -111,7 +111,7 @@
 <body>
     <div class="hearts"></div>
     <div class="container">
-        <h1>¿Querés ser mi San Valentín? ❤️</h1>
+        <h1 id="main-question">¿Querés ser mi San Valentín? ❤️</h1>
         <div class="caricatura-container">
             <div class="caricatura"></div>
             <div class="message"></div>
@@ -127,6 +127,7 @@
         const siBtn = document.getElementById('siBtn');
         const noBtn = document.getElementById('noBtn');
         const message = document.querySelector('.message');
+        const mainQuestion = document.getElementById('main-question');
         let clickCount = 0;
 
         siBtn.addEventListener('click', () => {
@@ -175,10 +176,10 @@
                 "¿No me deseas?",
                 "¿No me valoras?",
                 "¿No me aprecias?",
-                "¿No me respetas?",
-                "¿No me admiras?"
+                "¿No quieres intentarlo?",
+                "¿No quieres darme una oportunidad?"
             ];
-            message.textContent = textos[Math.min(clickCount - 1, textos.length - 1)];
+            mainQuestion.textContent = textos[Math.min(clickCount - 1, textos.length - 1)] + " ❤️";
         });
 
         function createHearts() {
