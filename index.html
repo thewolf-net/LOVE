@@ -139,7 +139,8 @@
   </div>
 
   <script>
-    let scale = 1;
+    let scaleSi = 1; // Escala del botón "Sí"
+    let scaleNo = 1; // Escala del botón "No"
     const siBtn = document.getElementById('siBtn');
     const noBtn = document.getElementById('noBtn');
     const message = document.querySelector('.message');
@@ -166,8 +167,8 @@
 
     noBtn.addEventListener('click', () => {
       clickCount++;
-      scale += 0.3;
-      siBtn.style.transform = `scale(${scale})`;
+      scaleNo *= 0.9; // Reducir la escala en un 10% cada clic
+      noBtn.style.transform = `scale(${scaleNo})`;
 
       const maxX = Math.min(window.innerWidth, 400) - noBtn.offsetWidth;
       const maxY = Math.min(window.innerHeight, 700) - noBtn.offsetHeight;
