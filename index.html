@@ -180,7 +180,7 @@
       noBtn.style.transform = `scale(${scaleNo})`;
 
       // Acelerar el movimiento: se reduce la duración de la animación (mínimo 0.3 s)
-      moveDuration = Math.max(0.3, moveDuration * 0.8);
+      moveDuration = Math.max(0.3, moveDuration * 0.1);
 
       // Al primer click, asignamos posición absoluta al botón "No" manteniendo su ubicación actual
       if (noBtn.style.position !== 'absolute') {
