@@ -17,47 +17,12 @@
       position: relative;
     }
 
-    /* Niebla romántica animada */
-    body::after {
-      content: '';
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(
-        45deg,
-        rgba(255, 182, 193, 0.2),
-        rgba(255, 255, 255, 0.3)
-      );
-      pointer-events: none;
-      z-index: 0;
-      animation: niebla 8s ease-in-out infinite alternate;
-    }
-
-    /* Latido de corazón para el botón Sí */
-    #siBtn {
-      animation: latido 1.2s infinite ease-in-out;
-    }
-
-    @keyframes latido {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.15); }
-      100% { transform: scale(1); }
-    }
-
-    @keyframes niebla {
-      0% { opacity: 0.2; transform: translateY(-10px); }
-      100% { opacity: 0.4; transform: translateY(10px); }
-    }
-
     .container {
       text-align: center;
       padding: 20px;
       width: 100%;
       box-sizing: border-box;
       z-index: 1;
-      position: relative;
     }
 
     h1 {
@@ -66,7 +31,6 @@
       margin-bottom: 30px;
       padding: 0 10px;
       margin-top: -40px;
-      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
     }
 
     .buttons {
@@ -99,6 +63,13 @@
       box-shadow: 0 4px 8px rgba(102, 102, 102, 0.3);
     }
 
+    #giftBtn {
+      background-color: #ff4d79;
+      color: white;
+      box-shadow: 0 4px 8px rgba(255, 77, 121, 0.3);
+      margin-top: 20px;
+    }
+
     .hearts {
       position: fixed;
       width: 100%;
@@ -115,9 +86,9 @@
       line-height: 1.4;
       text-shadow: 
         -1px -1px 0 white,  
-        1px -1px 0 white,
-        -1px 1px 0 white,
-        1px 1px 0 white;
+         1px -1px 0 white,
+        -1px  1px 0 white,
+         1px  1px 0 white;
     }
 
     .caricatura-container {
@@ -133,28 +104,23 @@
       background-size: cover;
       background-position: center;
       display: inline-block;
-      border-radius: 50%;
-      border: 4px solid #ff4d79;
     }
 
-    /* Animación de confeti */
-    .confeti {
-      position: fixed;
-      pointer-events: none;
-      font-size: 24px;
-      z-index: 9999;
-      animation: confeti-fall 3s linear forwards;
+    .message {
+      position: relative;
+      top: -40px;
+      font-size: 1.2em;
+      color: #ff4d79;
+      text-align: center;
+      width: 80%;
+      z-index: 2;
+      white-space: pre-line;
     }
 
-    @keyframes confeti-fall {
-      0% {
-        transform: translateY(-100vh) rotate(0deg);
-        opacity: 1;
-      }
-      100% {
-        transform: translateY(100vh) rotate(720deg);
-        opacity: 0;
-      }
+    img {
+      width: 200px;
+      height: auto;
+      background-size: cover;
     }
   </style>
 </head>
@@ -163,7 +129,8 @@
   <div class="container">
     <h1 id="main-question">¿Querés ser mi San Valentín? ❤️</h1>
     <div class="caricatura-container">
-      <div class="caricatura" style="background-image: url('https://raw.githubusercontent.com/thewolf-net/LOVE/main/Leonardo_Phoenix_10_A_minimalist_black_and_white_cartoon_portr_2.jpg');"></div>
+      <div class="caricatura" id="caricatura" style="background-image: url('https://raw.githubusercontent.com/thewolf-net/LOVE/main/Leonardo_Phoenix_10_A_minimalist_black_and_white_cartoon_portr_2.jpg');"></div>
+      <div class="message"></div>
     </div>
     <div class="buttons">
       <button id="siBtn">Sí</button>
@@ -172,30 +139,18 @@
   </div>
 
   <script>
-    let scaleSi = 1;
-    let scaleNo = 1;
+    let scaleSi = 1; // Escala del botón "Sí"
+    let scaleNo = 1; // Escala del botón "No"
     const siBtn = document.getElementById('siBtn');
     const noBtn = document.getElementById('noBtn');
+    const message = document.querySelector('.message');
+    const mainQuestion = document.getElementById('main-question');
+    const caricatura = document.getElementById('caricatura');
+    let clickCount = 0;
+
     const imageUrl = "https://raw.githubusercontent.com/thewolf-net/LOVE/main/Leonardo_Phoenix_10_A_minimalist_black_and_white_cartoon_portr_2.jpg";
 
-    // Función para crear confeti
-    function crearConfeti() {
-      const emojis = ['🎉', '🎊', '💖', '🎈', '✨', '❤️', '🥰'];
-      for (let i = 0; i < 75; i++) {
-        const confeti = document.createElement('div');
-        confeti.className = 'confeti';
-        confeti.textContent = emojis[Math.floor(Math.random() * emojis.length)];
-        confeti.style.left = Math.random() * 100 + 'vw';
-        confeti.style.animationDelay = Math.random() * 2 + 's';
-        confeti.style.filter = `hue-rotate(${Math.random() * 360}deg)`;
-        document.body.appendChild(confeti);
-        setTimeout(() => confeti.remove(), 3000);
-      }
-    }
-
-    // Evento clic en Sí
     siBtn.addEventListener('click', () => {
-      crearConfeti();
       document.body.innerHTML = `
         <div class="hearts"></div>
         <div class="success-message">
@@ -210,22 +165,25 @@
       createHearts();
     });
 
-    // Evento clic en No
     noBtn.addEventListener('click', () => {
+      clickCount++;
+      // Aumentar el tamaño del botón "Sí" en un 40%
       scaleSi += 0.4;
-      scaleNo *= 0.95;
       siBtn.style.transform = `scale(${scaleSi})`;
+
+      // Reducir el tamaño del botón "No" en un 5%
+      scaleNo *= 0.95;
       noBtn.style.transform = `scale(${scaleNo})`;
 
-      // Movimiento aleatorio
-      const maxX = window.innerWidth - noBtn.offsetWidth;
-      const maxY = window.innerHeight - noBtn.offsetHeight;
-      
+      // Mover el botón "No" aleatoriamente
+      const maxX = Math.min(window.innerWidth, 400) - noBtn.offsetWidth;
+      const maxY = Math.min(window.innerHeight, 700) - noBtn.offsetHeight;
+
       let newX, newY;
       do {
         newX = Math.random() * maxX;
         newY = Math.random() * maxY;
-      } while (isOverlapping(newX, newY, noBtn, document.getElementById('main-question')));
+      } while (isOverlapping(newX, newY, noBtn, mainQuestion));
 
       noBtn.style.position = 'absolute';
       noBtn.style.left = `${newX}px`;
@@ -243,9 +201,8 @@
       );
     }
 
-    // Función para corazones animados
     function createHearts() {
-      const interval = setInterval(() => {
+      setInterval(() => {
         const heart = document.createElement('div');
         heart.innerHTML = '❤️';
         heart.style.position = 'fixed';
@@ -272,7 +229,6 @@
       createHearts();
     }
 
-    // Animación de flotación para corazones
     document.head.insertAdjacentHTML('beforeend', `
       <style>
         @keyframes float {
