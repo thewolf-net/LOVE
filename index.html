@@ -143,24 +143,24 @@
             clickCount++;
             scale += 0.3;
             siBtn.style.transform = `scale(${scale})`;
-
+        
             // Cambiar el corazón a un corazón roto desde la primera vez que se hace clic en "No"
             if (clickCount === 1) {
                 caricatura.style.backgroundImage = "url('https://raw.githubusercontent.com/thewolf-net/LOVE/main/corazon_roto.jpg')";
             }
-
+        
             // Mover el botón "No" a una posición aleatoria dentro de los límites de la ventana
-            const maxX = window.innerWidth - noBtn.offsetWidth - 40; // Reducir el área de movimiento
-            const maxY = window.innerHeight - noBtn.offsetHeight - 80; // Reducir el área de movimiento
-
+            const maxX = window.innerWidth - noBtn.offsetWidth - 40; // Mantener el área de movimiento en X
+            const maxY = window.innerHeight - noBtn.offsetHeight - 80; // Reducir el área de movimiento en Y
+        
             const newX = Math.random() * maxX;
             const newY = Math.random() * maxY;
-
+        
             noBtn.style.position = 'absolute';
             noBtn.style.left = newX + 'px';
             noBtn.style.top = newY + 'px';
-
-            // Cambiar el texto del mensaje según los intentos
+        
+            // Cambiar el texto del mensaje aleatoriamente
             const textos = [
                 "Piénsalo bien",
                 "¡No seas así! ¿De verdad no quieres?",
@@ -175,7 +175,8 @@
                 "¿No quieres intentarlo?",
                 "¿No quieres darme una oportunidad?"
             ];
-            mainQuestion.innerHTML = textos[Math.min(clickCount - 1, textos.length - 1)] + " 🥹";
+            const randomIndex = Math.floor(Math.random() * textos.length);
+            mainQuestion.innerHTML = textos[randomIndex] + " 🥹";
         });
 
         function createHearts() {
