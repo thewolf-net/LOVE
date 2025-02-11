@@ -141,7 +141,6 @@
   <script>
     let scaleSi = 1; // Escala del botón "Sí"
     let scaleNo = 1; // Escala del botón "No"
-    let noBtnMoveDuration = 2.0; // Duración inicial de la animación del botón "No" (en segundos)
     const siBtn = document.getElementById('siBtn');
     const noBtn = document.getElementById('noBtn');
     const message = document.querySelector('.message');
@@ -166,47 +165,77 @@
       createHearts();
     });
 
+    // Variables para el movimiento del botón "No"
+    let noBtnMoving = false;
+    let noBtnX = 0;
+    let noBtnY = 0;
+    let noBtnVX = 0;
+    let noBtnVY = 0;
+
     noBtn.addEventListener('click', () => {
       clickCount++;
 
-      // Aumentar el tamaño del botón "Sí" en un 40%
+      // Aumenta el tamaño del botón "Sí" (manteniendo el comportamiento original)
       scaleSi += 0.4;
       siBtn.style.transform = `scale(${scaleSi})`;
 
-      // Reducir el tamaño del botón "No" en un 5%
+      // Disminuye el tamaño del botón "No"
       scaleNo *= 0.95;
-      noBtn.style.transform = `scale(${scaleNo})`;
-
-      // Establecer la transición para el movimiento flotante usando la duración actual
-      noBtn.style.transition = `left ${noBtnMoveDuration}s linear, top ${noBtnMoveDuration}s linear`;
-
-      // Calcular una nueva posición aleatoria para el botón "No"
-      const maxX = Math.min(window.innerWidth, 400) - noBtn.offsetWidth;
-      const maxY = Math.min(window.innerHeight, 700) - noBtn.offsetHeight;
-
-      let newX, newY;
-      do {
-        newX = Math.random() * maxX;
-        newY = Math.random() * maxY;
-      } while (isOverlapping(newX, newY, noBtn, mainQuestion));
-
-      noBtn.style.position = 'absolute';
-      noBtn.style.left = `${newX}px`;
-      noBtn.style.top = `${newY}px`;
-
-      // Reducir la duración para la próxima animación (se mueve más rápido)
-      noBtnMoveDuration *= 0.9;
+      
+      if (noBtnMoving) {
+        // Si ya se está moviendo, aumenta la velocidad con cada click (multiplicando por 1.2)
+        noBtnVX *= 1.2;
+        noBtnVY *= 1.2;
+      } else {
+        // Con el primer click, se inicializa el movimiento
+        const rect = noBtn.getBoundingClientRect();
+        noBtnX = rect.left;
+        noBtnY = rect.top;
+        noBtnMoving = true;
+        // Se asigna una velocidad inicial en dirección aleatoria (por ejemplo, 2 px por frame)
+        let angle = Math.random() * 2 * Math.PI;
+        noBtnVX = Math.cos(angle) * 2;
+        noBtnVY = Math.sin(angle) * 2;
+        // Se cambia la posición a absoluta para controlar su movimiento
+        noBtn.style.position = 'absolute';
+        // Inicia el loop de animación
+        requestAnimationFrame(animateNoButton);
+      }
+      // Se aplica la nueva escala (la traslación se actualizará en el loop de animación)
+      noBtn.style.transform = `translate(${noBtnX}px, ${noBtnY}px) scale(${scaleNo})`;
     });
 
-    function isOverlapping(x, y, element, otherElement) {
-      const rect1 = element.getBoundingClientRect();
-      const rect2 = otherElement.getBoundingClientRect();
-      return !(
-        x + rect1.width < rect2.left ||
-        x > rect2.right ||
-        y + rect1.height < rect2.top ||
-        y > rect2.bottom
-      );
+    function animateNoButton() {
+      if (!noBtnMoving) return;
+      // Actualiza la posición según la velocidad
+      noBtnX += noBtnVX;
+      noBtnY += noBtnVY;
+      
+      const btnWidth = noBtn.offsetWidth;
+      const btnHeight = noBtn.offsetHeight;
+      
+      // Rebota en los bordes laterales
+      if (noBtnX <= 0) {
+        noBtnX = 0;
+        noBtnVX = Math.abs(noBtnVX);
+      } else if (noBtnX + btnWidth >= window.innerWidth) {
+        noBtnX = window.innerWidth - btnWidth;
+        noBtnVX = -Math.abs(noBtnVX);
+      }
+      
+      // Rebota en los bordes superior e inferior
+      if (noBtnY <= 0) {
+        noBtnY = 0;
+        noBtnVY = Math.abs(noBtnVY);
+      } else if (noBtnY + btnHeight >= window.innerHeight) {
+        noBtnY = window.innerHeight - btnHeight;
+        noBtnVY = -Math.abs(noBtnVY);
+      }
+      
+      // Actualiza la transformación combinando traslación y escala
+      noBtn.style.transform = `translate(${noBtnX}px, ${noBtnY}px) scale(${scaleNo})`;
+      
+      requestAnimationFrame(animateNoButton);
     }
 
     function createHearts() {
