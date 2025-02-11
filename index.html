@@ -135,6 +135,9 @@
                 <div class="success-message">
                     ¡Sabía que ibas a decir que sí! ❤️<br>
                     Te amo mucho mi niña❤️
+                </div>
+                <div class="caricatura-container">
+                    <div class="caricatura" style="background-image: url('https://raw.githubusercontent.com/thewolf-net/LOVE/main/Leonardo_Phoenix_10_A_minimalist_black_and_white_cartoon_portr_2.jpg');"></div>
                 </div>`;
             createHearts();
         });
@@ -143,23 +146,23 @@
             clickCount++;
             scale += 0.3;
             siBtn.style.transform = `scale(${scale})`;
-        
+
             // Cambiar el corazón a un corazón roto desde la primera vez que se hace clic en "No"
             if (clickCount === 1) {
                 caricatura.style.backgroundImage = "url('https://raw.githubusercontent.com/thewolf-net/LOVE/main/corazon_roto.jpg')";
             }
-        
+
             // Mover el botón "No" a una posición aleatoria dentro de los límites de la ventana
             const maxX = window.innerWidth - noBtn.offsetWidth - 40; // Mantener el área de movimiento en X
             const maxY = window.innerHeight - noBtn.offsetHeight - 80; // Reducir el área de movimiento en Y
-        
+
             const newX = Math.random() * maxX;
             const newY = Math.random() * maxY;
-        
+
             noBtn.style.position = 'absolute';
             noBtn.style.left = newX + 'px';
             noBtn.style.top = newY + 'px';
-        
+
             // Cambiar el texto del mensaje aleatoriamente
             const textos = [
                 "Piénsalo bien",
