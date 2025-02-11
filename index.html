@@ -149,6 +149,17 @@
                 caricatura.style.backgroundImage = "url('https://raw.githubusercontent.com/thewolf-net/LOVE/main/corazon_roto.jpg')";
             }
 
+            // Mover el botón "No" a una posición aleatoria dentro de los límites de la ventana
+            const maxX = window.innerWidth - noBtn.offsetWidth;
+            const maxY = window.innerHeight - noBtn.offsetHeight;
+
+            const newX = Math.random() * maxX;
+            const newY = Math.random() * maxY;
+
+            noBtn.style.position = 'absolute';
+            noBtn.style.left = newX + 'px';
+            noBtn.style.top = newY + 'px';
+
             // Cambiar el texto del mensaje según los intentos
             const textos = [
                 "Piénsalo bien :(",
