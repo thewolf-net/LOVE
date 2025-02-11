@@ -30,7 +30,7 @@
       font-size: 2.5em;
       margin-bottom: 30px;
       padding: 0 10px;
-      margin-top: -40px; /* Subir las frases */
+      margin-top: -40px;
     }
 
     .buttons {
@@ -61,6 +61,13 @@
       background-color: #666;
       color: white;
       box-shadow: 0 4px 8px rgba(102, 102, 102, 0.3);
+    }
+
+    #giftBtn {
+      background-color: #ff4d79;
+      color: white;
+      box-shadow: 0 4px 8px rgba(255, 77, 121, 0.3);
+      margin-top: 20px;
     }
 
     .hearts {
@@ -96,7 +103,7 @@
 
     .message {
       position: relative;
-      top: -40px; /* Mueve las frases más arriba */
+      top: -40px;
       font-size: 1.2em;
       color: #ff4d79;
       text-align: center;
@@ -105,8 +112,6 @@
       white-space: pre-line;
     }
 
-    /* Eliminar la regla que sobreescribe la altura de .caricatura */
-    /* Si deseas ajustar imágenes <img> de otra forma, puedes hacerlo por separado */
     img {
       width: 200px;
       height: auto;
@@ -117,10 +122,8 @@
 <body>
   <div class="hearts"></div>
   <div class="container">
-    <!-- Pregunta principal -->
     <h1 id="main-question">¿Querés ser mi San Valentín? ❤️</h1>
     <div class="caricatura-container">
-      <!-- Primera imagen debajo de la pregunta -->
       <div class="caricatura" id="caricatura" style="background-image: url('https://raw.githubusercontent.com/thewolf-net/LOVE/main/Leonardo_Phoenix_10_A_minimalist_black_and_white_cartoon_portr_2.jpg');"></div>
       <div class="message"></div>
     </div>
@@ -139,10 +142,8 @@
     const caricatura = document.getElementById('caricatura');
     let clickCount = 0;
 
-    // Usaremos la misma imagen para los tres casos
     const imageUrl = "https://raw.githubusercontent.com/thewolf-net/LOVE/main/Leonardo_Phoenix_10_A_minimalist_black_and_white_cartoon_portr_2.jpg";
 
-    // Lista de frases para el botón "No"
     const textos = [
       "Piénsalo bien",
       "¡No seas así! ¿De verdad no quieres?",
@@ -160,30 +161,27 @@
 
     let usedTexts = new Set();
 
-    // Acción al hacer clic en "Sí"
     siBtn.addEventListener('click', () => {
       document.body.innerHTML = `
+        <div class="hearts"></div>
         <div class="success-message">
           ¡Sabía que ibas a decir que sí! ❤️<br>
           Te amo mucho mi niña❤️
+          <button id="giftBtn" onclick="showGiftMessage()">➡️</button>
         </div>
         <div class="caricatura-container">
-          <!-- Tercera imagen debajo del mensaje de éxito -->
           <div class="caricatura" style="background-image: url('${imageUrl}');"></div>
         </div>
       `;
       createHearts();
     });
 
-    // Acción al hacer clic en "No"
     noBtn.addEventListener('click', () => {
       clickCount++;
       scale += 0.3;
       siBtn.style.transform = `scale(${scale})`;
 
-      // Actualizamos el contenido de .caricatura-container para mostrar la segunda imagen
       document.querySelector('.caricatura-container').innerHTML = `
-        <!-- Segunda imagen debajo de las frases adicionales -->
         <div class="caricatura" style="background-image: url('${imageUrl}');"></div>
         <div class="message"></div>
       `;
@@ -237,6 +235,20 @@
       }, 100);
     }
 
+    function showGiftMessage() {
+      document.body.innerHTML = `
+        <div class="hearts"></div>
+        <div class="success-message">
+          ¡Ahora sí los regalos son tuyos! 🎁<br>
+          No es mucho pero espero quye pueda demostrar cuánto te amo 🥹❤️
+        </div>
+        <div class="caricatura-container">
+          <div class="caricatura" style="background-image: url('${imageUrl}');"></div>
+        </div>
+      `;
+      createHearts();
+    }
+
     document.head.insertAdjacentHTML('beforeend', `
       <style>
         @keyframes float {
@@ -249,5 +261,3 @@
   </script>
 </body>
 </html>
-
-
