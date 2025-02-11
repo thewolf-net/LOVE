@@ -57,12 +57,11 @@
       box-shadow: 0 4px 8px rgba(255, 77, 121, 0.3);
     }
 
-    /* El botón “No” se posiciona de forma absoluta para poder moverse libremente */
+    /* Inicialmente, el botón “No” se muestra en el flujo normal (debajo del “Sí”) */
     #noBtn {
       background-color: #666;
       color: white;
       box-shadow: 0 4px 8px rgba(102, 102, 102, 0.3);
-      position: absolute;
     }
 
     #giftBtn {
@@ -183,6 +182,14 @@
       // Acelerar el movimiento: se reduce la duración de la animación (mínimo 0.3 s)
       moveDuration = Math.max(0.3, moveDuration * 0.8);
 
+      // Al primer click, asignamos posición absoluta al botón "No" manteniendo su ubicación actual
+      if (noBtn.style.position !== 'absolute') {
+        const rect = noBtn.getBoundingClientRect();
+        noBtn.style.position = 'absolute';
+        noBtn.style.left = rect.left + 'px';
+        noBtn.style.top = rect.top + 'px';
+      }
+
       // Si ya hay un movimiento programado, se cancela para reiniciarlo
       if (moveTimeout) {
         clearTimeout(moveTimeout);
@@ -194,8 +201,8 @@
     // Función que mueve el botón "No" a una posición aleatoria y programa el siguiente movimiento
     function moveNoButton() {
       // Calcular nueva posición aleatoria (se evita superponer el título)
-      const maxX = Math.min(window.innerWidth, 400) - noBtn.offsetWidth;
-      const maxY = Math.min(window.innerHeight, 700) - noBtn.offsetHeight;
+      const maxX = window.innerWidth - noBtn.offsetWidth;
+      const maxY = window.innerHeight - noBtn.offsetHeight;
       let newX, newY;
       do {
         newX = Math.random() * maxX;
