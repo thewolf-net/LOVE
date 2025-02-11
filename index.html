@@ -57,10 +57,12 @@
       box-shadow: 0 4px 8px rgba(255, 77, 121, 0.3);
     }
 
+    /* El botón “No” se posiciona de forma absoluta para poder moverse libremente */
     #noBtn {
       background-color: #666;
       color: white;
       box-shadow: 0 4px 8px rgba(102, 102, 102, 0.3);
+      position: absolute;
     }
 
     #giftBtn {
@@ -148,6 +150,7 @@
     const caricatura = document.getElementById('caricatura');
     let clickCount = 0;
     let moveDuration = 2; // Duración inicial de la animación (en segundos)
+    let moveTimeout = null; // Identificador del timeout para el movimiento continuo
 
     const imageUrl = "https://raw.githubusercontent.com/thewolf-net/LOVE/main/Leonardo_Phoenix_10_A_minimalist_black_and_white_cartoon_portr_2.jpg";
 
@@ -177,26 +180,38 @@
       scaleNo *= 0.95;
       noBtn.style.transform = `scale(${scaleNo})`;
 
-      // Calcular nueva posición aleatoria (evitando superponer el título)
+      // Acelerar el movimiento: se reduce la duración de la animación (mínimo 0.3 s)
+      moveDuration = Math.max(0.3, moveDuration * 0.8);
+
+      // Si ya hay un movimiento programado, se cancela para reiniciarlo
+      if (moveTimeout) {
+        clearTimeout(moveTimeout);
+      }
+      // Iniciar (o reiniciar) el movimiento continuo del botón "No"
+      moveNoButton();
+    });
+
+    // Función que mueve el botón "No" a una posición aleatoria y programa el siguiente movimiento
+    function moveNoButton() {
+      // Calcular nueva posición aleatoria (se evita superponer el título)
       const maxX = Math.min(window.innerWidth, 400) - noBtn.offsetWidth;
       const maxY = Math.min(window.innerHeight, 700) - noBtn.offsetHeight;
-
       let newX, newY;
       do {
         newX = Math.random() * maxX;
         newY = Math.random() * maxY;
       } while (isOverlapping(newX, newY, noBtn, mainQuestion));
 
-      noBtn.style.position = 'absolute';
-      // Se aplica transición para animar el movimiento y lograr el efecto de "flotar"
+      // Se aplica la transición para animar el movimiento
       noBtn.style.transition = `left ${moveDuration}s linear, top ${moveDuration}s linear, transform 0.3s ease-out`;
       noBtn.style.left = `${newX}px`;
       noBtn.style.top = `${newY}px`;
 
-      // Cada click acelera el movimiento (reduce la duración de la animación)
-      moveDuration = Math.max(0.3, moveDuration * 0.8);
-    });
+      // Programar el siguiente movimiento cuando termine el actual
+      moveTimeout = setTimeout(moveNoButton, moveDuration * 1000);
+    }
 
+    // Función para evitar que el botón se superponga al título
     function isOverlapping(x, y, element, otherElement) {
       const rect1 = {
         left: x,
@@ -213,6 +228,7 @@
       );
     }
 
+    // Función que crea corazones flotantes en el fondo
     function createHearts() {
       setInterval(() => {
         const heart = document.createElement('div');
