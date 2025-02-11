@@ -55,19 +55,15 @@
       background-color: #ff4d79;
       color: white;
       box-shadow: 0 4px 8px rgba(255, 77, 121, 0.3);
+      transition: transform 0.3s ease;
     }
 
     #noBtn {
       background-color: #666;
       color: white;
       box-shadow: 0 4px 8px rgba(102, 102, 102, 0.3);
-    }
-
-    #giftBtn {
-      background-color: #ff4d79;
-      color: white;
-      box-shadow: 0 4px 8px rgba(255, 77, 121, 0.3);
-      margin-top: 20px;
+      transition: transform 0.3s ease, left 0.5s linear, top 0.5s linear;
+      position: relative;
     }
 
     .hearts {
@@ -104,23 +100,8 @@
       background-size: cover;
       background-position: center;
       display: inline-block;
-    }
-
-    .message {
-      position: relative;
-      top: -40px;
-      font-size: 1.2em;
-      color: #ff4d79;
-      text-align: center;
-      width: 80%;
-      z-index: 2;
-      white-space: pre-line;
-    }
-
-    img {
-      width: 200px;
-      height: auto;
-      background-size: cover;
+      border-radius: 50%;
+      border: 4px solid #ff4d79;
     }
   </style>
 </head>
@@ -129,8 +110,7 @@
   <div class="container">
     <h1 id="main-question">¿Querés ser mi San Valentín? ❤️</h1>
     <div class="caricatura-container">
-      <div class="caricatura" id="caricatura" style="background-image: url('https://raw.githubusercontent.com/thewolf-net/LOVE/main/Leonardo_Phoenix_10_A_minimalist_black_and_white_cartoon_portr_2.jpg');"></div>
-      <div class="message"></div>
+      <div class="caricatura" style="background-image: url('https://raw.githubusercontent.com/thewolf-net/LOVE/main/Leonardo_Phoenix_10_A_minimalist_black_and_white_cartoon_portr_2.jpg');"></div>
     </div>
     <div class="buttons">
       <button id="siBtn">Sí</button>
@@ -139,16 +119,68 @@
   </div>
 
   <script>
-    let scaleSi = 1; // Escala del botón "Sí"
-    let scaleNo = 1; // Escala del botón "No"
+    let scaleSi = 1;
+    let scaleNo = 1;
+    let clickCount = 0;
+    let isMoving = false;
+    let speed = 1;
+    let directionX = 1;
+    let directionY = 1;
+    let animationFrame;
+
     const siBtn = document.getElementById('siBtn');
     const noBtn = document.getElementById('noBtn');
-    const message = document.querySelector('.message');
-    const mainQuestion = document.getElementById('main-question');
-    const caricatura = document.getElementById('caricatura');
-    let clickCount = 0;
-
     const imageUrl = "https://raw.githubusercontent.com/thewolf-net/LOVE/main/Leonardo_Phoenix_10_A_minimalist_black_and_white_cartoon_portr_2.jpg";
+
+    const moveButton = () => {
+      if (!isMoving) return;
+
+      const rect = noBtn.getBoundingClientRect();
+      let x = parseFloat(noBtn.style.left) || rect.left;
+      let y = parseFloat(noBtn.style.top) || rect.top;
+
+      // Actualizar posición
+      x += speed * directionX;
+      y += speed * directionY;
+
+      // Rebotar en los bordes
+      if (x <= 0 || x >= window.innerWidth - rect.width) {
+        directionX *= -1;
+        speed *= 1.2;
+      }
+      if (y <= 0 || y >= window.innerHeight - rect.height) {
+        directionY *= -1;
+        speed *= 1.2;
+      }
+
+      // Aplicar nueva posición
+      noBtn.style.position = 'fixed';
+      noBtn.style.left = `${x}px`;
+      noBtn.style.top = `${y}px`;
+
+      animationFrame = requestAnimationFrame(moveButton);
+    };
+
+    noBtn.addEventListener('click', () => {
+      clickCount++;
+      
+      // Escalar botones
+      scaleSi += 0.4;
+      scaleNo *= 0.95;
+      siBtn.style.transform = `scale(${scaleSi})`;
+      noBtn.style.transform = `scale(${scaleNo})`;
+      
+      // Iniciar movimiento en el primer click
+      if (clickCount === 1) {
+        isMoving = true;
+        speed = 2;
+        directionX = Math.random() > 0.5 ? 1 : -1;
+        directionY = Math.random() > 0.5 ? 1 : -1;
+        moveButton();
+      } else {
+        speed *= 1.5; // Aumentar velocidad progresivamente
+      }
+    });
 
     siBtn.addEventListener('click', () => {
       document.body.innerHTML = `
@@ -165,44 +197,8 @@
       createHearts();
     });
 
-    noBtn.addEventListener('click', () => {
-      clickCount++;
-      // Aumentar el tamaño del botón "Sí" en un 40%
-      scaleSi += 0.4;
-      siBtn.style.transform = `scale(${scaleSi})`;
-
-      // Reducir el tamaño del botón "No" en un 5%
-      scaleNo *= 0.95;
-      noBtn.style.transform = `scale(${scaleNo})`;
-
-      // Mover el botón "No" aleatoriamente
-      const maxX = Math.min(window.innerWidth, 400) - noBtn.offsetWidth;
-      const maxY = Math.min(window.innerHeight, 700) - noBtn.offsetHeight;
-
-      let newX, newY;
-      do {
-        newX = Math.random() * maxX;
-        newY = Math.random() * maxY;
-      } while (isOverlapping(newX, newY, noBtn, mainQuestion));
-
-      noBtn.style.position = 'absolute';
-      noBtn.style.left = `${newX}px`;
-      noBtn.style.top = `${newY}px`;
-    });
-
-    function isOverlapping(x, y, element, otherElement) {
-      const rect1 = element.getBoundingClientRect();
-      const rect2 = otherElement.getBoundingClientRect();
-      return !(
-        x + rect1.width < rect2.left ||
-        x > rect2.right ||
-        y + rect1.height < rect2.top ||
-        y > rect2.bottom
-      );
-    }
-
     function createHearts() {
-      setInterval(() => {
+      const interval = setInterval(() => {
         const heart = document.createElement('div');
         heart.innerHTML = '❤️';
         heart.style.position = 'fixed';
