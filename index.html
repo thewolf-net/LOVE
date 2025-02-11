@@ -147,11 +147,12 @@
     const mainQuestion = document.getElementById('main-question');
     const caricatura = document.getElementById('caricatura');
     let clickCount = 0;
+    let moveDuration = 2; // Duración inicial de la animación (en segundos)
 
     const imageUrl = "https://raw.githubusercontent.com/thewolf-net/LOVE/main/Leonardo_Phoenix_10_A_minimalist_black_and_white_cartoon_portr_2.jpg";
 
     siBtn.addEventListener('click', () => {
-      document.body.innerHTML = 
+      document.body.innerHTML = `
         <div class="hearts"></div>
         <div class="success-message">
           ¡Sabía que ibas a decir que sí! ❤️<br>
@@ -161,21 +162,22 @@
         <div class="caricatura-container">
           <div class="caricatura" style="background-image: url('${imageUrl}');"></div>
         </div>
-      ;
+      `;
       createHearts();
     });
 
     noBtn.addEventListener('click', () => {
       clickCount++;
+
       // Aumentar el tamaño del botón "Sí" en un 40%
       scaleSi += 0.4;
-      siBtn.style.transform = scale(${scaleSi});
+      siBtn.style.transform = `scale(${scaleSi})`;
 
       // Reducir el tamaño del botón "No" en un 5%
       scaleNo *= 0.95;
-      noBtn.style.transform = scale(${scaleNo});
+      noBtn.style.transform = `scale(${scaleNo})`;
 
-      // Mover el botón "No" aleatoriamente
+      // Calcular nueva posición aleatoria (evitando superponer el título)
       const maxX = Math.min(window.innerWidth, 400) - noBtn.offsetWidth;
       const maxY = Math.min(window.innerHeight, 700) - noBtn.offsetHeight;
 
@@ -186,18 +188,28 @@
       } while (isOverlapping(newX, newY, noBtn, mainQuestion));
 
       noBtn.style.position = 'absolute';
-      noBtn.style.left = ${newX}px;
-      noBtn.style.top = ${newY}px;
+      // Se aplica transición para animar el movimiento y lograr el efecto de "flotar"
+      noBtn.style.transition = `left ${moveDuration}s linear, top ${moveDuration}s linear, transform 0.3s ease-out`;
+      noBtn.style.left = `${newX}px`;
+      noBtn.style.top = `${newY}px`;
+
+      // Cada click acelera el movimiento (reduce la duración de la animación)
+      moveDuration = Math.max(0.3, moveDuration * 0.8);
     });
 
     function isOverlapping(x, y, element, otherElement) {
-      const rect1 = element.getBoundingClientRect();
+      const rect1 = {
+        left: x,
+        top: y,
+        right: x + element.offsetWidth,
+        bottom: y + element.offsetHeight
+      };
       const rect2 = otherElement.getBoundingClientRect();
       return !(
-        x + rect1.width < rect2.left ||
-        x > rect2.right ||
-        y + rect1.height < rect2.top ||
-        y > rect2.bottom
+        rect1.right < rect2.left ||
+        rect1.left > rect2.right ||
+        rect1.bottom < rect2.top ||
+        rect1.top > rect2.bottom
       );
     }
 
@@ -216,7 +228,7 @@
     }
 
     function showGiftMessage() {
-      document.body.innerHTML = 
+      document.body.innerHTML = `
         <div class="hearts"></div>
         <div class="success-message">
           ¡Ahora sí los regalos son tuyos! 🎁<br>
@@ -225,11 +237,11 @@
         <div class="caricatura-container">
           <div class="caricatura" style="background-image: url('${imageUrl}');"></div>
         </div>
-      ;
+      `;
       createHearts();
     }
 
-    document.head.insertAdjacentHTML('beforeend', 
+    document.head.insertAdjacentHTML('beforeend', `
       <style>
         @keyframes float {
           to {
@@ -237,7 +249,7 @@
           }
         }
       </style>
-    );
+    `);
   </script>
 </body>
 </html>
