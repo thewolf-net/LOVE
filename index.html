@@ -16,6 +16,7 @@
       overflow: hidden;
       position: relative;
     }
+
     .container {
       text-align: center;
       padding: 20px;
@@ -23,19 +24,22 @@
       box-sizing: border-box;
       z-index: 1;
     }
+
     h1 {
       color: #ff4d79;
       font-size: 2.5em;
       margin-bottom: 30px;
       padding: 0 10px;
-      margin-top: -40px;
+      margin-top: -40px; /* Subir las frases */
     }
+
     .buttons {
       display: flex;
       flex-direction: column;
       gap: 20px;
       align-items: center;
     }
+
     button {
       padding: 15px 40px;
       font-size: 1.5em;
@@ -46,19 +50,17 @@
       width: 200px;
       touch-action: manipulation;
     }
+
     #siBtn {
       background-color: #ff4d79;
       color: white;
+      box-shadow: 0 4px 8px rgba(255, 77, 121, 0.3);
     }
+
     #noBtn {
       background-color: #666;
       color: white;
-    }
-    .success-message {
-      font-size: 1.8em;
-      color: #ff4d79;
-      text-align: center;
-      padding: 20px;
+      box-shadow: 0 4px 8px rgba(102, 102, 102, 0.3);
     }
   </style>
 </head>
@@ -70,16 +72,17 @@
       <button id="noBtn">No</button>
     </div>
   </div>
+
   <script>
     let firstClick = true;
     document.getElementById('siBtn').addEventListener('click', () => {
       document.body.innerHTML = `
         <div class="success-message">
-          ${firstClick ? 'Sabía que dirías que sí a la primera! ❤️' : 'Sabía que ibas a decir que sí! ❤️'}<br>
+          ${firstClick ? '¡Sabía que dirías que sí a la primera! ❤️' : '¡Sabía que ibas a decir que sí! ❤️'}<br>
           Te amo mucho mi niña ❤️
         </div>
         <div class="caricatura-container">
-          <img src="https://raw.githubusercontent.com/thewolf-net/LOVE/main/Leonardo_Phoenix_10_A_minimalist_black_and_white_cartoon_portr_2.jpg" alt="Caricatura">
+          <div class="caricatura" style="background-image: url('https://raw.githubusercontent.com/thewolf-net/LOVE/main/Leonardo_Phoenix_10_A_minimalist_black_and_white_cartoon_portr_2.jpg');"></div>
         </div>
       `;
       firstClick = false;
