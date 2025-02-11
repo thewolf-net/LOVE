@@ -14,6 +14,7 @@
             background-color: #ffd6e6;
             font-family: Arial, sans-serif;
             overflow: hidden;
+            position: relative;
         }
 
         .container {
@@ -21,6 +22,7 @@
             padding: 20px;
             width: 100%;
             box-sizing: border-box;
+            z-index: 1;
         }
 
         h1 {
@@ -76,16 +78,17 @@
             line-height: 1.4;
         }
 
-        .caricatura {
+        .background-image {
             position: absolute;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 150px;
-            height: 150px;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://raw.githubusercontent.com/thewolf-net/LOVE/main/Leonardo_Phoenix_10_A_minimalist_black_and_white_cartoon_portr_2.jpg');
             background-size: cover;
             background-position: center;
-            z-index: 1;
+            z-index: 0;
+            opacity: 0.5; /* Ajusta la opacidad según sea necesario */
         }
 
         .message {
@@ -99,18 +102,204 @@
             width: 80%;
             z-index: 2;
         }
+    </style>
+</head>
+<body>
+    <div class="hearts"></div>
+    <div class="background-image"></div>
+    <div class="container">
+        <h1>¿Querés ser mi San Valentín? ❤️</h1>
+        <div class="buttons">
+            <button id="siBtn">Sí</button>
+            <button id="noBtn">No</button>
+        </div>
+    </div>
+    <div class="message"></div>
 
-        .initial-image {
+    <script>
+        let scale = 1;
+        const siBtn = document.getElementById('siBtn');
+        const noBtn = document.getElementById('noBtn');
+        const message = document.querySelector('.message');
+        let clickCount = 0;
+
+        siBtn.addEventListener('click', () => {
+            document.body.innerHTML = `
+                <div class="success-message">
+                    ¡Sabía que ibas a decir que sí! ❤️<br>
+                    Te amo mucho mi niña❤️
+                </div>`;
+            createHearts();
+        });
+
+        noBtn.addEventListener('click', () => {
+            clickCount++;
+            scale += 0.3;
+            siBtn.style.transform = `scale(${scale})`;
+
+            // Mover el botón "No" a una posición aleatoria dentro de los límites de la ventana
+            const maxX = window.innerWidth - noBtn.offsetWidth;
+            const maxY = window.innerHeight - noBtn.offsetHeight;
+
+            const newX = Math.random() * maxX;
+            const newY = Math.random() * maxY;
+
+            noBtn.style.position = 'absolute';
+            noBtn.style.left = newX + 'px';
+            noBtn.style.top = newY + 'px';
+
+            // Cambiar el texto del mensaje según los intentos
+            if (clickCount >= 3) {
+                const textos = [
+                    "¿Segura?",
+                    "¿De verdad?",
+                    "Piénsalo bien",
+                    "¿Última oportunidad?",
+                    "¡No seas así!",
+                    ":((",
+                    "...</3"
+                ];
+                message.textContent = textos[Math.min(clickCount - 3, textos.length - 1)];
+            }
+        });
+
+        function createHearts() {
+            setInterval(() => {
+                const heart = document.createElement('div');
+                heart.innerHTML = '❤️';
+                heart.style.position = 'fixed';
+                heart.style.left = Math.random() * 100 + 'vw';
+                heart.style.top = '100vh';
+                heart.style.fontSize = Math.random() * 20 + 20 + 'px';
+                heart.style.animation = 'float 4s linear forwards';
+                document.querySelector('.hearts').appendChild(heart);
+
+                setTimeout(() => heart.remove(), 4000);
+            }, 100);
+        }
+
+        document.head.insertAdjacentHTML('beforeend', `
+            <style>
+                @keyframes float {
+                    to {
+                        transform: translateY(-100vh) rotate(360deg);
+                    }
+                }
+            </style>
+        `);
+    </script>
+</body>
+</html>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>¿Querés ser mi San Valentín?</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #ffd6e6;
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .container {
+            text-align: center;
+            padding: 20px;
             width: 100%;
-            max-width: 400px;
-            margin-bottom: 20px;
+            box-sizing: border-box;
+            z-index: 1;
+        }
+
+        h1 {
+            color: #ff4d79;
+            font-size: 2em;
+            margin-bottom: 30px;
+            padding: 0 10px;
+        }
+
+        .buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            align-items: center;
+        }
+
+        button {
+            padding: 15px 40px;
+            font-size: 1.5em;
+            cursor: pointer;
+            border: none;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            width: 200px;
+            touch-action: manipulation;
+        }
+
+        #siBtn {
+            background-color: #ff4d79;
+            color: white;
+            box-shadow: 0 4px 8px rgba(255, 77, 121, 0.3);
+        }
+
+        #noBtn {
+            background-color: #666;
+            color: white;
+            box-shadow: 0 4px 8px rgba(102, 102, 102, 0.3);
+        }
+
+        .hearts {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .success-message {
+            font-size: 1.8em;
+            color: #ff4d79;
+            text-align: center;
+            padding: 20px;
+            line-height: 1.4;
+        }
+
+        .background-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://raw.githubusercontent.com/thewolf-net/LOVE/main/Leonardo_Phoenix_10_A_minimalist_black_and_white_cartoon_portr_2.jpg');
+            background-size: cover;
+            background-position: center;
+            z-index: 0;
+            opacity: 0.5; /* Ajusta la opacidad según sea necesario */
+        }
+
+        .message {
+            position: absolute;
+            top: 180px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 1.2em;
+            color: #ff4d79;
+            text-align: center;
+            width: 80%;
+            z-index: 2;
         }
     </style>
 </head>
 <body>
     <div class="hearts"></div>
+    <div class="background-image"></div>
     <div class="container">
-        <div class="caricatura" style="background-image: url('https://raw.githubusercontent.com/thewolf-net/LOVE/main/Leonardo_Phoenix_10_A_minimalist_black_and_white_cartoon_portr_2.jpg');"></div>
         <h1>¿Querés ser mi San Valentín? ❤️</h1>
         <div class="buttons">
             <button id="siBtn">Sí</button>
