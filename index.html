@@ -141,6 +141,7 @@
   <script>
     let scaleSi = 1; // Escala del botón "Sí"
     let scaleNo = 1; // Escala del botón "No"
+    let noBtnMoveDuration = 2.0; // Duración inicial de la animación del botón "No" (en segundos)
     const siBtn = document.getElementById('siBtn');
     const noBtn = document.getElementById('noBtn');
     const message = document.querySelector('.message');
@@ -167,6 +168,7 @@
 
     noBtn.addEventListener('click', () => {
       clickCount++;
+
       // Aumentar el tamaño del botón "Sí" en un 40%
       scaleSi += 0.4;
       siBtn.style.transform = `scale(${scaleSi})`;
@@ -175,7 +177,10 @@
       scaleNo *= 0.95;
       noBtn.style.transform = `scale(${scaleNo})`;
 
-      // Mover el botón "No" aleatoriamente
+      // Establecer la transición para el movimiento flotante usando la duración actual
+      noBtn.style.transition = `left ${noBtnMoveDuration}s linear, top ${noBtnMoveDuration}s linear`;
+
+      // Calcular una nueva posición aleatoria para el botón "No"
       const maxX = Math.min(window.innerWidth, 400) - noBtn.offsetWidth;
       const maxY = Math.min(window.innerHeight, 700) - noBtn.offsetHeight;
 
@@ -188,6 +193,9 @@
       noBtn.style.position = 'absolute';
       noBtn.style.left = `${newX}px`;
       noBtn.style.top = `${newY}px`;
+
+      // Reducir la duración para la próxima animación (se mueve más rápido)
+      noBtnMoveDuration *= 0.9;
     });
 
     function isOverlapping(x, y, element, otherElement) {
