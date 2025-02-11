@@ -167,9 +167,15 @@
 
     noBtn.addEventListener('click', () => {
       clickCount++;
-      scaleNo *= 0.9; // Reducir la escala en un 10% cada clic
+      // Aumentar el tamaño del botón "Sí" en un 30%
+      scaleSi += 0.3;
+      siBtn.style.transform = `scale(${scaleSi})`;
+
+      // Reducir el tamaño del botón "No" en un 10%
+      scaleNo *= 0.9;
       noBtn.style.transform = `scale(${scaleNo})`;
 
+      // Mover el botón "No" aleatoriamente
       const maxX = Math.min(window.innerWidth, 400) - noBtn.offsetWidth;
       const maxY = Math.min(window.innerHeight, 700) - noBtn.offsetHeight;
 
