@@ -151,7 +151,7 @@
     const imageUrl = "https://raw.githubusercontent.com/thewolf-net/LOVE/main/Leonardo_Phoenix_10_A_minimalist_black_and_white_cartoon_portr_2.jpg";
 
     siBtn.addEventListener('click', () => {
-      document.body.innerHTML = `
+      document.body.innerHTML = 
         <div class="hearts"></div>
         <div class="success-message">
           ¡Sabía que ibas a decir que sí! ❤️<br>
@@ -161,91 +161,44 @@
         <div class="caricatura-container">
           <div class="caricatura" style="background-image: url('${imageUrl}');"></div>
         </div>
-      `;
+      ;
       createHearts();
     });
 
-    // Variables para el movimiento del botón "No"
-    let noBtnMoving = false;
-    let noBtnX = 0;
-    let noBtnY = 0;
-    let noBtnVX = 0;
-    let noBtnVY = 0;
-
     noBtn.addEventListener('click', () => {
       clickCount++;
-
-      // Aumenta la escala del botón "Sí" (comportamiento original)
+      // Aumentar el tamaño del botón "Sí" en un 40%
       scaleSi += 0.4;
-      siBtn.style.transform = `scale(${scaleSi})`;
+      siBtn.style.transform = scale(${scaleSi});
 
-      // Disminuye la escala del botón "No"
+      // Reducir el tamaño del botón "No" en un 5%
       scaleNo *= 0.95;
+      noBtn.style.transform = scale(${scaleNo});
 
-      if (noBtnMoving) {
-        // Si ya se está moviendo, aumenta la velocidad con cada click (multiplicando por 1.2)
-        noBtnVX *= 1.2;
-        noBtnVY *= 1.2;
-      } else {
-        // En el primer click se inicializa el movimiento
-        const rect = noBtn.getBoundingClientRect();
-        noBtnX = rect.left;
-        noBtnY = rect.top;
-        noBtnMoving = true;
-        // Se asigna una velocidad inicial en dirección aleatoria (2 px por frame aproximadamente)
-        let angle = Math.random() * 2 * Math.PI;
-        noBtnVX = Math.cos(angle) * 2;
-        noBtnVY = Math.sin(angle) * 2;
-        // Se cambia la posición a absoluta para controlar su movimiento
-        noBtn.style.position = 'absolute';
-        requestAnimationFrame(animateNoButton);
-      }
-      // Actualiza la transformación combinando traslación y escala
-      noBtn.style.transform = `translate(${noBtnX}px, ${noBtnY}px) scale(${scaleNo})`;
+      // Mover el botón "No" aleatoriamente
+      const maxX = Math.min(window.innerWidth, 400) - noBtn.offsetWidth;
+      const maxY = Math.min(window.innerHeight, 700) - noBtn.offsetHeight;
+
+      let newX, newY;
+      do {
+        newX = Math.random() * maxX;
+        newY = Math.random() * maxY;
+      } while (isOverlapping(newX, newY, noBtn, mainQuestion));
+
+      noBtn.style.position = 'absolute';
+      noBtn.style.left = ${newX}px;
+      noBtn.style.top = ${newY}px;
     });
 
-    function animateNoButton() {
-      if (!noBtnMoving) return;
-      // Actualiza la posición según la velocidad
-      noBtnX += noBtnVX;
-      noBtnY += noBtnVY;
-      
-      // Calcula el ancho y alto efectivos considerando la escala
-      const effectiveWidth = noBtn.offsetWidth * scaleNo;
-      const effectiveHeight = noBtn.offsetHeight * scaleNo;
-      const margin = 20; // margen mínimo de separación con los bordes
-
-      // Definimos los límites internos (área donde se puede mover el botón)
-      const allowedLeft = margin;
-      const allowedRight = window.innerWidth - effectiveWidth - margin;
-      const allowedTop = margin;
-      const allowedBottom = window.innerHeight - effectiveHeight - margin;
-
-      // Si el botón se acerca a los bordes (dentro de un umbral), aplicamos una aceleración suave que lo empuja hacia adentro
-      const threshold = 30; // umbral para comenzar a "alejar" el botón de los bordes
-      if (noBtnX < allowedLeft + threshold) {
-          noBtnVX += 0.2;  // acelera hacia la derecha
-      }
-      if (noBtnX > allowedRight - threshold) {
-          noBtnVX -= 0.2;  // acelera hacia la izquierda
-      }
-      if (noBtnY < allowedTop + threshold) {
-          noBtnVY += 0.2;  // acelera hacia abajo
-      }
-      if (noBtnY > allowedBottom - threshold) {
-          noBtnVY -= 0.2;  // acelera hacia arriba
-      }
-
-      // Evitamos que se salga del área permitida (lo "clampeamos")
-      if (noBtnX < allowedLeft) noBtnX = allowedLeft;
-      if (noBtnX > allowedRight) noBtnX = allowedRight;
-      if (noBtnY < allowedTop) noBtnY = allowedTop;
-      if (noBtnY > allowedBottom) noBtnY = allowedBottom;
-
-      // Actualiza la transformación combinando la posición y la escala actualizadas
-      noBtn.style.transform = `translate(${noBtnX}px, ${noBtnY}px) scale(${scaleNo})`;
-
-      requestAnimationFrame(animateNoButton);
+    function isOverlapping(x, y, element, otherElement) {
+      const rect1 = element.getBoundingClientRect();
+      const rect2 = otherElement.getBoundingClientRect();
+      return !(
+        x + rect1.width < rect2.left ||
+        x > rect2.right ||
+        y + rect1.height < rect2.top ||
+        y > rect2.bottom
+      );
     }
 
     function createHearts() {
@@ -263,7 +216,7 @@
     }
 
     function showGiftMessage() {
-      document.body.innerHTML = `
+      document.body.innerHTML = 
         <div class="hearts"></div>
         <div class="success-message">
           ¡Ahora sí los regalos son tuyos! 🎁<br>
@@ -272,11 +225,11 @@
         <div class="caricatura-container">
           <div class="caricatura" style="background-image: url('${imageUrl}');"></div>
         </div>
-      `;
+      ;
       createHearts();
     }
 
-    document.head.insertAdjacentHTML('beforeend', `
+    document.head.insertAdjacentHTML('beforeend', 
       <style>
         @keyframes float {
           to {
@@ -284,7 +237,7 @@
           }
         }
       </style>
-    `);
+    );
   </script>
 </body>
 </html>
