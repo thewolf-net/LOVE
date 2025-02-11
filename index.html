@@ -170,11 +170,14 @@
             caricatura.style.backgroundImage = `url('${imageUrl}')`;
 
             // Mover el botón "No" a una posición aleatoria dentro de los límites de la ventana
-            const maxX = window.innerWidth - noBtn.offsetWidth - 40; // Mantener el área de movimiento en X
+            const maxX = window.innerWidth - noBtn.offsetWidth - 100; // Mantener el área de movimiento en X
             const maxY = window.innerHeight - noBtn.offsetHeight - 100; // Reducir el área de movimiento en Y
 
-            const newX = Math.random() * maxX;
-            const newY = Math.random() * maxY;
+            let newX, newY;
+            do {
+                newX = Math.random() * maxX;
+                newY = Math.random() * maxY;
+            } while (isOverlapping(newX, newY, noBtn, mainQuestion));
 
             noBtn.style.position = 'absolute';
             noBtn.style.left = newX + 'px';
@@ -191,6 +194,18 @@
             usedTexts.add(selectedText);
             mainQuestion.innerHTML = selectedText + " 🥹";
         });
+
+        function isOverlapping(x, y, element, otherElement) {
+            const rect1 = element.getBoundingClientRect();
+            const rect2 = otherElement.getBoundingClientRect();
+
+            return !(
+                x + rect1.width < rect2.left ||
+                x > rect2.right ||
+                y + rect1.height < rect2.top ||
+                y > rect2.bottom
+            );
+        }
 
         function createHearts() {
             setInterval(() => {
