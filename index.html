@@ -130,11 +130,26 @@
         const caricatura = document.getElementById('caricatura');
         let clickCount = 0;
 
-        const images = [
-            "https://raw.githubusercontent.com/thewolf-net/LOVE/main/corazon_roto.jpg",
-            "https://raw.githubusercontent.com/thewolf-net/LOVE/main/imagen2.jpg",
-            "https://raw.githubusercontent.com/thewolf-net/LOVE/main/imagen3.jpg"
+        const initialImage = "https://raw.githubusercontent.com/thewolf-net/LOVE/main/Leonardo_Phoenix_10_A_minimalist_black_and_white_cartoon_portr_2.jpg";
+        const noImage = "https://raw.githubusercontent.com/thewolf-net/LOVE/main/corazon_roto.jpg";
+        const siImage = "https://raw.githubusercontent.com/thewolf-net/LOVE/main/imagen_si.jpg";
+
+        const textos = [
+            "Piénsalo bien",
+            "¡No seas así! ¿De verdad no quieres?",
+            "¿No quieres?",
+            "¿Te lo pensarás?",
+            "¿No me quieres?",
+            "¿No te gusto?",
+            "¿No me amas?",
+            "¿No me extrañarás?",
+            "¿No me necesitas?",
+            "¿No me deseas?",
+            "¿No quieres intentarlo?",
+            "¿No quieres darme una oportunidad?"
         ];
+
+        let usedTexts = new Set();
 
         siBtn.addEventListener('click', () => {
             document.body.innerHTML = `
@@ -143,7 +158,7 @@
                     Te amo mucho mi niña❤️
                 </div>
                 <div class="caricatura-container">
-                    <div class="caricatura" style="background-image: url('https://raw.githubusercontent.com/thewolf-net/LOVE/main/Leonardo_Phoenix_10_A_minimalist_black_and_white_cartoon_portr_2.jpg');"></div>
+                    <div class="caricatura" style="background-image: url('${siImage}');"></div>
                 </div>`;
             createHearts();
         });
@@ -153,9 +168,8 @@
             scale += 0.3;
             siBtn.style.transform = `scale(${scale})`;
 
-            // Cambiar la imagen a una nueva cada vez que se hace clic en "No"
-            const randomImageIndex = Math.floor(Math.random() * images.length);
-            caricatura.style.backgroundImage = `url('${images[randomImageIndex]}')`;
+            // Cambiar la imagen a la imagen de "No"
+            caricatura.style.backgroundImage = `url('${noImage}')`;
 
             // Mover el botón "No" a una posición aleatoria dentro de los límites de la ventana
             const maxX = window.innerWidth - noBtn.offsetWidth - 40; // Mantener el área de movimiento en X
@@ -168,23 +182,16 @@
             noBtn.style.left = newX + 'px';
             noBtn.style.top = newY + 'px';
 
-            // Cambiar el texto del mensaje aleatoriamente
-            const textos = [
-                "Piénsalo bien",
-                "¡No seas así! ¿De verdad no quieres?",
-                "¿No quieres?",
-                "¿Te lo pensarás?",
-                "¿No me quieres?",
-                "¿No te gusto?",
-                "¿No me amas?",
-                "¿No me extrañarás?",
-                "¿No me necesitas?",
-                "¿No me deseas?",
-                "¿No quieres intentarlo?",
-                "¿No quieres darme una oportunidad?"
-            ];
-            const randomIndex = Math.floor(Math.random() * textos.length);
-            mainQuestion.innerHTML = textos[randomIndex] + " 🥹";
+            // Cambiar el texto del mensaje aleatoriamente sin repetición
+            let availableTexts = textos.filter(text => !usedTexts.has(text));
+            if (availableTexts.length === 0) {
+                availableTexts = textos;
+                usedTexts.clear();
+            }
+            const randomIndex = Math.floor(Math.random() * availableTexts.length);
+            const selectedText = availableTexts[randomIndex];
+            usedTexts.add(selectedText);
+            mainQuestion.innerHTML = selectedText + " 🥹";
         });
 
         function createHearts() {
