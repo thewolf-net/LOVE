@@ -88,7 +88,7 @@
         -1px -1px 0 white,  
          1px -1px 0 white,
         -1px  1px 0 white,
-         1px  1px 0 white; /* Borde blanco */
+         1px  1px 0 white;
     }
 
     .caricatura-container {
@@ -149,23 +149,6 @@
 
     const imageUrl = "https://raw.githubusercontent.com/thewolf-net/LOVE/main/Leonardo_Phoenix_10_A_minimalist_black_and_white_cartoon_portr_2.jpg";
 
-    const textos = [
-      "Piénsalo bien",
-      "¡No seas así! ¿De verdad no quieres?",
-      "¿No quieres?",
-      "¿Te lo pensarás?",
-      "¿No me quieres?",
-      "¿No te gusto?",
-      "¿No me amas?",
-      "¿No me extrañarás?",
-      "¿No me necesitas?",
-      "¿No me deseas?",
-      "¿No quieres intentarlo?",
-      "¿No quieres darme una oportunidad?"
-    ];
-
-    let usedTexts = new Set();
-
     siBtn.addEventListener('click', () => {
       document.body.innerHTML = `
         <div class="hearts"></div>
@@ -186,11 +169,6 @@
       scale += 0.3;
       siBtn.style.transform = `scale(${scale})`;
 
-      document.querySelector('.caricatura-container').innerHTML = `
-        <div class="caricatura" style="background-image: url('${imageUrl}');"></div>
-        <div class="message"></div>
-      `;
-
       const maxX = Math.min(window.innerWidth, 400) - noBtn.offsetWidth;
       const maxY = Math.min(window.innerHeight, 700) - noBtn.offsetHeight;
 
@@ -203,16 +181,6 @@
       noBtn.style.position = 'absolute';
       noBtn.style.left = `${newX}px`;
       noBtn.style.top = `${newY}px`;
-
-      let availableTexts = textos.filter(text => !usedTexts.has(text));
-      if (availableTexts.length === 0) {
-        availableTexts = textos;
-        usedTexts.clear();
-      }
-      const randomIndex = Math.floor(Math.random() * availableTexts.length);
-      const selectedText = availableTexts[randomIndex];
-      usedTexts.add(selectedText);
-      mainQuestion.innerHTML = selectedText + " 🥹";
     });
 
     function isOverlapping(x, y, element, otherElement) {
