@@ -91,46 +91,31 @@
          1px  1px 0 white;
     }
 
+    /* Contenedor para las caricaturas/imágenes */
     .caricatura-container {
-      position: relative;
       width: 100%;
       text-align: center;
       margin-bottom: 20px;
     }
 
-    /* Se actualiza la clase para que la imagen de fondo se adapte responsivamente */
-    .caricatura {
+    /* Todas las imágenes se adaptan sin recortarse */
+    .caricatura-img {
       width: 80%;
       max-width: 300px;
-      /* Elimina aspect-ratio si lo tenías, ya que forzará un recorte */
-      /* aspect-ratio: 1 / 1; */
-    
-      background-image: url('TU_URL');
-      background-size: contain; /* Muestra la imagen completa */
-      background-repeat: no-repeat;
-      background-position: center;
-    
-      margin: 0 auto;
-      display: block;
-    }
-
-    /* Para cualquier etiqueta <img> se ajusta su tamaño */
-    img {
-      max-width: 100%;
       height: auto;
       display: block;
       margin: 0 auto;
     }
 
     .message {
-      position: relative;
-      top: -40px;
       font-size: 1.2em;
       color: #ff4d79;
       text-align: center;
       width: 80%;
-      z-index: 2;
+      margin: 0 auto;
       white-space: pre-line;
+      margin-top: -20px;
+      margin-bottom: 20px;
     }
   </style>
 </head>
@@ -139,7 +124,13 @@
   <div class="container">
     <h1 id="main-question">¿Querés ser mi San Valentín? ❤️</h1>
     <div class="caricatura-container">
-      <div class="caricatura" id="caricatura" style="background-image: url('https://raw.githubusercontent.com/thewolf-net/LOVE/main/yo1.png');"></div>
+      <!-- Imagen principal -->
+      <img 
+        src="https://raw.githubusercontent.com/thewolf-net/LOVE/main/yo1.png" 
+        alt="Caricatura principal" 
+        class="caricatura-img" 
+        id="caricatura"
+      >
       <div class="message"></div>
     </div>
     <div class="buttons">
@@ -155,14 +146,15 @@
     const noBtn = document.getElementById('noBtn');
     const message = document.querySelector('.message');
     const mainQuestion = document.getElementById('main-question');
-    const caricatura = document.getElementById('caricatura');
     let clickCount = 0;
     let moveDuration = 2; // Duración inicial de la animación (en segundos)
     let moveTimeout = null; // Identificador del timeout para el movimiento continuo
 
+    // Imagen que se mostrará al hacer clic en "Sí"
     const imageUrl = "https://raw.githubusercontent.com/thewolf-net/LOVE/main/Leonardo_Phoenix_10_A_minimalist_black_and_white_cartoon_portr_2.jpg";
 
     siBtn.addEventListener('click', () => {
+      // Reemplazamos todo el contenido del body con el mensaje de éxito
       document.body.innerHTML = `
         <div class="hearts"></div>
         <div class="success-message">
@@ -171,7 +163,12 @@
           <button id="giftBtn" onclick="showGiftMessage()">➡️</button>
         </div>
         <div class="caricatura-container">
-          <div class="caricatura" style="background-image: url('${imageUrl}');"></div>
+          <!-- Aquí usamos <img> en vez de background -->
+          <img 
+            src="${imageUrl}" 
+            alt="Caricatura de regalo" 
+            class="caricatura-img"
+          >
         </div>
       `;
       createHearts();
@@ -189,7 +186,7 @@
       noBtn.style.transform = `scale(${scaleNo})`;
 
       // Acelerar el movimiento: se reduce la duración de la animación (mínimo 0.3 s)
-      moveDuration = moveDuration * 0.95
+      moveDuration = moveDuration * 0.95;
 
       // Al primer click, asignamos posición absoluta al botón "No" manteniendo su ubicación actual
       if (noBtn.style.position !== 'absolute') {
@@ -209,7 +206,6 @@
 
     // Función que mueve el botón "No" a una posición aleatoria y programa el siguiente movimiento
     function moveNoButton() {
-      // Calcular nueva posición aleatoria (se evita superponer el título)
       const maxX = window.innerWidth - noBtn.offsetWidth;
       const maxY = window.innerHeight - noBtn.offsetHeight;
       let newX, newY;
@@ -218,16 +214,14 @@
         newY = Math.random() * maxY;
       } while (isOverlapping(newX, newY, noBtn, mainQuestion));
 
-      // Se aplica la transición para animar el movimiento
       noBtn.style.transition = `left ${moveDuration}s linear, top ${moveDuration}s linear, transform 0.3s ease-out`;
       noBtn.style.left = `${newX}px`;
       noBtn.style.top = `${newY}px`;
 
-      // Programar el siguiente movimiento cuando termine el actual
       moveTimeout = setTimeout(moveNoButton, moveDuration * 1000);
     }
 
-    // Función para evitar que el botón se superponga al título
+    // Evitar superposición con el título
     function isOverlapping(x, y, element, otherElement) {
       const rect1 = {
         left: x,
@@ -244,7 +238,7 @@
       );
     }
 
-    // Función que crea corazones flotantes en el fondo
+    // Crear corazones flotantes
     function createHearts() {
       setInterval(() => {
         const heart = document.createElement('div');
@@ -259,6 +253,7 @@
       }, 100);
     }
 
+    // Mostrar segundo mensaje (regalo)
     function showGiftMessage() {
       document.body.innerHTML = `
         <div class="hearts"></div>
@@ -267,12 +262,17 @@
           No es mucho pero espero que pueda demostrar cuánto te amo ❤️
         </div>
         <div class="caricatura-container">
-          <div class="caricatura" style="background-image: url('${imageUrl}');"></div>
+          <img 
+            src="${imageUrl}" 
+            alt="Caricatura de regalo" 
+            class="caricatura-img"
+          >
         </div>
       `;
       createHearts();
     }
 
+    // Animación para los corazones
     document.head.insertAdjacentHTML('beforeend', `
       <style>
         @keyframes float {
