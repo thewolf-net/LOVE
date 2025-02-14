@@ -102,11 +102,16 @@
     .caricatura {
       width: 80%;
       max-width: 300px;
-      aspect-ratio: 1 / 1; /* Mantiene la relación de 1:1 */
-      background-size: cover;
+      /* Elimina aspect-ratio si lo tenías, ya que forzará un recorte */
+      /* aspect-ratio: 1 / 1; */
+    
+      background-image: url('TU_URL');
+      background-size: contain; /* Muestra la imagen completa */
+      background-repeat: no-repeat;
       background-position: center;
-      display: inline-block;
+    
       margin: 0 auto;
+      display: block;
     }
 
     /* Para cualquier etiqueta <img> se ajusta su tamaño */
